@@ -19,7 +19,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry
+            sh 'which bash'
+            dockerImage = docker.build registry
         }
       }
     }
@@ -49,6 +50,29 @@ pipeline {
             dockerImage.run("-p 5000:5000 --rm --name mypythonappContainer")
          }
       }
+    }
+    stage("Approve test") {
+        steps {
+            script {
+                env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                    parameters: [choice(name: 'RELEASE_SCOPE', choices: 'yes\no', description: 'Can we release?')]
+                }
+                echo "${env.RELEASE_SCOPE}"
+            }
+        }
+    stage("Deploy"){
+        steps {
+            script{
+                if (env.RELEASE_SCOPE == "yes"){
+                    script{
+                        sh "sudo chmod 777 script.sh"
+                        sh "./script.sh"
+                    }
+                }
+            }
+                
+            }
+        
     }
   }
 }
