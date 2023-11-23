@@ -1,2 +1,3 @@
 #!/usr/bin/bash
-nohup python3 app.py &
+
+sudo sed -i 's/#//' /etc/nginx/nginx.conf
