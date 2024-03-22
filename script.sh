@@ -1,6 +1,6 @@
 #!/bin/bash
 #get the image name from Dockerfile file 
-dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
+dockerImageName=$(awk '/^FROM/ {print $2}' Dockerfile)
 echo $dockerImageName
 
 #-e TRIVY_GITHUB_TOKEN=$token: Sets an environment variable TRIVY_GITHUB_TOKEN with the provided token value. This is used to access private GitHub repositories during vulnerability scanning.
